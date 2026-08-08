@@ -118,20 +118,13 @@
 
     <script>
         const db = [
-            // 0. QUICK PAYLOADS (ADDED AT THE VERY BEGINNING AS A STANDARD CARD)
-            { c: "۰. پیلودها و دستورات پرکاربرد (Quick Payloads)", i: "QUICK-01", t: "پی‌لود XSS عمومی", tl: "Browser", p: `<script>alert(document.domain)</script>\n<svg/onload=alert(1)>` },
-            { c: "۰. پیلودها و دستورات پرکاربرد (Quick Payloads)", i: "QUICK-02", t: "پی‌لود SQLi عمومی", tl: "Burp Repeater", p: `' OR '1'='1 -- \nadmin' -- \nUNION SELECT null,null--` },
-            { c: "۰. پیلودها و دستورات پرکاربرد (Quick Payloads)", i: "QUICK-03", t: "پی‌لود مسیر (LFI / Traversal)", tl: "Burp Repeater", p: `../../../../etc/passwd\n..\\..\\..\\..\\windows\\win.ini` },
-            { c: "۰. پیلودها و دستورات پرکاربرد (Quick Payloads)", i: "QUICK-04", t: "پی‌لود SSRF / تست کلود", tl: "Burp Repeater", p: `http://169.254.169.254/latest/meta-data/\nhttp://127.0.0.1:80/` },
-            { c: "۰. پیلودها و دستورات پرکاربرد (Quick Payloads)", i: "QUICK-05", t: "پی‌لود ارزیابی قالب (SSTI)", tl: "Burp Repeater", p: `{{7*7}}\n\${7*7}\n<%= 7*7 %>` },
-
             // 1. INFO
             { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-01", t: "موتورهای جستجو", tl: "Burp/Browser", p: `Target: Google/GitHub\nPoint: Search bar\nPayload: site:target.com ext:sql OR ext:bak OR filetype:env\nMethod: بررسی دیتای نشت‌یافته در دامنه‌های عمومی.` },
             { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-02", t: "شناسایی وب‌سرور", tl: "Burp Proxy", p: `Target: HTTP Response Headers\nPoint: Server / X-Powered-By / Via\nMethod: بررسی هدرهای برگشتی در Burp Repeater برای یافتن نسخه دقیق سرویس‌ها.` },
             { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-03", t: "بررسی متافایل‌ها", tl: "Burp/Browser", p: `Target: Root Directory\nPoint: /robots.txt , /sitemap.xml , /.well-known/\nMethod: باز کردن مسیرها برای یافتن پنل‌های مخفی یا دایرکتوری‌های غیرقابل ایندکس.` },
             { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-04", t: "شمارش اپلیکیشن‌ها", tl: "Burp Intruder", p: `Target: Subdomains / Virtual Hosts\nPoint: Host Header\nMethod: استفاده از Burp Intruder با لیست ساب‌دامین روی هدر Host.` },
             { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-05", t: "بررسی کامنت‌ها و سورس", tl: "Burp Suite", p: `Target: HTML / JS Source Code\nPoint: Client-side comments\nMethod: جستجو در تب Target Scope برای کلمات کلیدی: password, api_key, secret, TODO, admin.` },
-            { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-06", t: "شناسایی نقاط ورود", tl: "Burp Proxy", p: `Target: Proxy History\nPoint: تمام پارامترهای GET، پوسِت و JSON\nMethod: مرور کامل ترافیک پراکسی برای استخراج تمام ورودی‌های برنامه (Attack Surface).` },
+            { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-06", t: "شناسایی نقاط ورود", tl: "Burp Proxy", p: `Target: Proxy History\nPoint: تمام پارامترهای GET، POST و JSON\nMethod: مرور کامل ترافیک پراکسی برای استخراج تمام ورودی‌های برنامه (Attack Surface).` },
             { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-07", t: "مسیرهای اجرایی (Paths)", tl: "Burp Intruder", p: `Target: Application Root\nPoint: URL Path\nMethod: فرستادن wordlist به Intruder روی مسیر وب‌سایت برای یافتن پوشه‌های مخفی.` },
             { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-08", t: "شناسایی فریم‌ورک", tl: "Burp Repeater", p: `Target: Cookie & Response\nPoint: نام کوکی‌ها (مثل PHPSESSID, ASP.NET_SessionId)\nMethod: تطبیق نام کوکی‌ها و ساختار هدرها با تکنولوژی‌های backend.` },
             { c: "۱. جمع‌آوری اطلاعات (INFO)", i: "WSTG-INFO-09", t: "انگشت‌نگاری (Fingerprint)", tl: "Burp Repeater", p: `Target: Static Assets (JS/CSS)\nPoint: فایل‌های کتابخانه‌های قدیمی (مثل jQuery آسیب‌پذیر)\nMethod: بررسی هش یا نسخه فایل‌های جاوا اسکریپت لود شده.` },
@@ -248,7 +241,7 @@
         const catPillsDiv = document.getElementById('catPills');
         const floatingMenuDiv = document.getElementById('floatingMenu');
         
-        document.getElementById('stats').innerText = `تعداد کل آیتم‌ها و تست‌های بارگذاری شده: ${db.length} مورد`;
+        document.getElementById('stats').innerText = `تعداد کل تست‌های بارگذاری شده: ${db.length} مورد`;
 
         const categories = {};
         db.forEach(item => {
@@ -261,14 +254,16 @@
         let floatingHTML = '';
         let catIndex = 0;
 
-        const icons = ['⚡', '🛡️', '⚙️', '🆔', '🔑', '🔓', '🍪', '📥', '⚠️', '🔐', '💼', '🌐'];
+        const icons = ['🛡️', '⚙️', '🆔', '🔑', '🔓', '🍪', '📥', '⚠️', '🔐', '💼', '🌐'];
 
         for (const [catName, tests] of Object.entries(categories)) {
             const safeId = `cat-${catIndex}`;
             const icon = icons[catIndex % icons.length];
             
+            // Pills in header
             pillsHTML += `<a href="#${safeId}" class="cat-pill">${catName.split(' ')[0]} ${catName.split(' ')[1]}</a>`;
             
+            // Floating menu items
             floatingHTML += `
                 <a href="#${safeId}" class="floating-menu-item" title="${catName}">
                     <span class="icon">${icon}</span>
@@ -282,10 +277,10 @@
                     <div class="table-responsive">
                         <table>
                             <tr>
-                                <th style="width: 12%;">شناسه / کد</th>
-                                <th style="width: 18%;">عنوان / موضوع</th>
+                                <th style="width: 12%;">شناسه OWASP</th>
+                                <th style="width: 18%;">عنوان تست</th>
                                 <th style="width: 12%;">ابزار اصلی</th>
-                                <th style="width: 58%;">جزئیات، توضیحات و پی‌لود (برای کپی کلیک کنید)</th>
+                                <th style="width: 58%;">نقطه تست، نحوه اجرا و پی‌لود (Burp Suite Focus)</th>
                             </tr>
             `;
             tests.forEach(test => {
@@ -312,6 +307,7 @@
         catPillsDiv.innerHTML = pillsHTML;
         floatingMenuDiv.innerHTML = floatingHTML;
 
+        // Toggle search box
         window.toggleSearch = function() {
             const input = document.getElementById('searchInput');
             input.classList.toggle('active');
@@ -323,6 +319,7 @@
             }
         }
 
+        // Filter / Search function
         window.filterTests = function() {
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
             const cards = document.querySelectorAll('.card');
@@ -350,9 +347,10 @@
                 }
             });
 
-            document.getElementById('stats').innerText = query ? `نتایج جستجو: ${visibleCount} مورد یافت شد` : `تعداد کل آیتم‌ها و تست‌های بارگذاری شده: ${db.length} مورد`;
+            document.getElementById('stats').innerText = query ? `نتایج جستجو: ${visibleCount} مورد یافت شد` : `تعداد کل تست‌های بارگذاری شده: ${db.length} مورد`;
         }
 
+        // Copy functionality
         window.copySnippet = function(element) {
             const text = element.innerText;
             navigator.clipboard.writeText(text).then(() => {
@@ -364,7 +362,7 @@
                     element.classList.remove('copied');
                 }, 1500);
             }).catch(err => {
-                alert('خطا در کپی کردن متن!');
+                alert('خطا در کپی کردن متن! دسترسی کلیپ‌بورد را بررسی کنید.');
             });
         };
     </script>
