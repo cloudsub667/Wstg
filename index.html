@@ -16,15 +16,52 @@
             background-color: var(--bg-color); color: var(--text-color);
             margin: 0; padding: 15px; line-height: 1.6;
         }
-        .container { max-width: 1400px; margin: 0 auto; }
+        .container { max-width: 1400px; margin: 0 auto; padding-right: 70px; }
+        @media(max-width: 900px) { .container { padding-right: 0; } }
+
         header {
-            text-align: center; margin-bottom: 25px; padding: 25px;
+            text-align: center; margin-bottom: 25px; padding: 20px;
             background: linear-gradient(145deg, #1e293b, #0f172a);
             border-radius: 12px; border: 1px solid var(--border-color);
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); position: sticky; top: 0; z-index: 100;
         }
-        h1 { color: var(--accent-color); margin: 0 0 10px 0; font-size: 1.8rem; }
-        p.sub { color: #94a3b8; margin: 0; font-size: 0.95rem; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        h1 { color: var(--accent-color); margin: 0; font-size: 1.5rem; }
+        
+        .search-box-wrapper { display: flex; align-items: center; gap: 8px; position: relative; }
+        .search-icon-btn {
+            background: #0284c7; border: none; color: white; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; gap: 5px; transition: background 0.2s;
+        }
+        .search-icon-btn:hover { background: #0369a1; }
+        .search-input {
+            width: 0; padding: 0; border: none; border-radius: 6px; background: #090d16; color: white; font-size: 0.9rem; transition: all 0.3s ease; outline: none;
+        }
+        .search-input.active { width: 250px; padding: 8px 12px; border: 1px solid var(--accent-color); }
+
+        .cat-pills {
+            display: flex; gap: 8px; overflow-x: auto; padding: 10px 0 5px 0; width: 100%; white-space: nowrap; scrollbar-width: thin;
+        }
+        .cat-pill {
+            background: #334155; color: #cbd5e1; padding: 6px 12px; border-radius: 20px; font-size: 0.8rem; text-decoration: none; transition: all 0.2s;
+        }
+        .cat-pill:hover, .cat-pill.active { background: var(--accent-color); color: #0f172a; font-weight: bold; }
+
+        /* Floating Quick Menu */
+        .floating-menu {
+            position: fixed; right: 15px; top: 100px; width: 55px; background: var(--card-bg);
+            border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; align-items: center; padding: 10px 5px; z-index: 99; transition: width 0.3s ease; overflow: hidden;
+        }
+        .floating-menu:hover { width: 220px; align-items: flex-start; }
+        .floating-menu-item {
+            display: flex; align-items: center; gap: 10px; color: #94a3b8; text-decoration: none; width: 100%; padding: 8px; border-radius: 6px; font-size: 0.85rem; white-space: nowrap; transition: background 0.2s, color 0.2s;
+        }
+        .floating-menu-item:hover { background: #334155; color: var(--accent-color); }
+        .floating-menu-item span.icon { font-size: 1.1rem; min-width: 25px; text-align: center; }
+        .floating-menu-item span.text { opacity: 0; transition: opacity 0.2s; }
+        .floating-menu:hover span.text { opacity: 1; }
+        @media(max-width: 900px) { .floating-menu { display: none; } }
+
         .card {
             background-color: var(--card-bg); border: 1px solid var(--border-color);
             border-radius: 12px; padding: 20px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
@@ -43,16 +80,33 @@
         .click-to-copy.copied { background-color: var(--success-color) !important; color: white !important; border-style: solid; border-color: var(--success-color); }
         .badge { background-color: #0369a1; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-family: monospace; white-space: nowrap; display: inline-block; }
         .tool-badge { background-color: #475569; color: #e2e8f0; padding: 3px 6px; border-radius: 4px; font-size: 0.75rem; white-space: nowrap; }
-        .stats { margin-top: 15px; font-weight: bold; color: #10b981; }
+        .stats { font-weight: bold; color: #10b981; font-size: 0.85rem; }
         footer { text-align: center; color: #64748b; margin-top: 30px; font-size: 0.9em; padding-bottom: 30px; }
+        .hidden-row { display: none !important; }
     </style>
 </head>
 <body>
+
+    <!-- Floating Quick Jump Menu -->
+    <div class="floating-menu" id="floatingMenu" title="منوی دسته‌بندی‌ها">
+        <!-- Filled via JS -->
+    </div>
+
     <div class="container">
         <header>
-            <h1>مرجع کامل تست نفوذ وب (تمامی موارد WSTG v4.2)</h1>
-            <p class="sub">نسخه بهینه‌شده با سناریوهای کاربردی محور Burp Suite - روی باکس‌های کُد کلیک کنید تا کپی شوند</p>
-            <div class="stats" id="stats">در حال بارگذاری...</div>
+            <div class="header-top">
+                <h1>مرجع کامل تست نفوذ وب (WSTG v4.2)</h1>
+                <div class="search-box-wrapper">
+                    <button class="search-icon-btn" onclick="toggleSearch()" title="جستجو در صفحه">
+                        🔍 <span style="font-size: 0.85rem;">جستجو</span>
+                    </button>
+                    <input type="text" id="searchInput" class="search-input" placeholder="جستجو در شناسه، عنوان یا پی‌لود..." oninput="filterTests()">
+                </div>
+            </div>
+            <div class="cat-pills" id="catPills">
+                <!-- Filled via JS -->
+            </div>
+            <div class="stats" id="stats" style="margin-top: 10px;">در حال بارگذاری...</div>
         </header>
 
         <div id="app"></div>
@@ -101,7 +155,7 @@
             { c: "۴. احراز هویت (AUTHN)", i: "WSTG-AUTHN-02", t: "پسوردهای پیش‌فرض", tl: "Burp Intruder", p: `Target: Login Endpoint\nPoint: فیلد username و password\nMethod: ارسال لیست رمزهای پیش‌فرض رایج (admin:admin، root:toor) با Intruder.` },
             { c: "۴. احراز هویت (AUTHN)", i: "WSTG-AUTHN-03", t: "مکانیسم قفل اکانت (Lockout)", tl: "Burp Intruder", p: `Target: Login API\nPoint: ارسال متوالی درخواست با رمز اشتباه\nMethod: تست اینکه آیا پس از ۵ تا ۱۰ تلاش ناموفق، حساب کاربری قفل می‌شود یا خیر.` },
             { c: "۴. احراز هویت (AUTHN)", i: "WSTG-AUTHN-04", t: "دور زدن احراز هویت", tl: "Burp Repeater", p: `Target: Login Parameters\nPoint: فیلد ورودی لاگین\nPayload: admin' OR '1'='1'# یا {"username": {"$ne": null}}\nMethod: تزریق پی‌لودهای بایپس در فیلدهای لاگین.` },
-            { c: "۴. احراز هویت (AUTHN)", i: "WSTG-AUTHN-05", t: "مرا به خاطر بسپار آسیب‌پذیر", tl: "Burp Repeater", p: `Target: Remember-Me Cookie\nPoint: کوکی‌های ذخیره‌شده سشن\nMethod: بررسی اینکه آیا توکن Remember-Me به اندازه کافی تصادفی و امن تولید شده یا قابل پیش‌بینی است.` },
+            { c: "۴. احراز هویت (AUTHN)", i: "WSTG-AUTHN-05", t: "مکان را به خاطر بسپار (Remember-Me)", tl: "Burp Repeater", p: `Target: Remember-Me Cookie\nPoint: کوکی‌های ذخیره‌شده سشن\nMethod: بررسی اینکه آیا توکن Remember-Me به اندازه کافی تصادفی و امن تولید شده یا قابل پیش‌بینی است.` },
             { c: "۴. احراز هویت (AUTHN)", i: "WSTG-AUTHN-06", t: "کش مرورگر و تاریخچه", tl: "Browser", p: `Target: Logout Flow\nPoint: دکمه Back مرورگر پس از خروج\nMethod: کلیک روی دکمه بازگشت مرورگر بعد از زدن دکمه Logout برای بررسی ماندگاری صفحه حساس در کش.` },
             { c: "۴. احراز هویت (AUTHN)", i: "WSTG-AUTHN-07", t: "سیاست رمز ضعیف", tl: "Burp Repeater", p: `Target: Change Password / Register\nPoint: فیلد رمز عبور جدید\nMethod: تست اینکه آیا سیستم اجازه ثبت رمزهای بسیار ساده مثل 123456 را می‌دهد یا خیر.` },
             { c: "۴. احراز هویت (AUTHN)", i: "WSTG-AUTHN-08", t: "سوالات امنیتی ضعیف", tl: "Burp Suite", p: `Target: Security Questions\nPoint: پاسخ سوالات امنیتی (مثل نام حیوان خانگی یا شهر تولد)\nMethod: بررسی قابل حدس بودن پاسخ‌ها یا امکان تزریق SQL در آن‌ها.` },
@@ -184,6 +238,9 @@
         ];
 
         const appDiv = document.getElementById('app');
+        const catPillsDiv = document.getElementById('catPills');
+        const floatingMenuDiv = document.getElementById('floatingMenu');
+        
         document.getElementById('stats').innerText = `تعداد کل تست‌های بارگذاری شده: ${db.length} مورد`;
 
         const categories = {};
@@ -193,9 +250,29 @@
         });
 
         let htmlContent = '';
+        let pillsHTML = '';
+        let floatingHTML = '';
+        let catIndex = 0;
+
+        const icons = ['🛡️', '⚙️', '🆔', '🔑', '🔓', '🍪', '📥', '⚠️', '🔐', '💼', '🌐'];
+
         for (const [catName, tests] of Object.entries(categories)) {
+            const safeId = `cat-${catIndex}`;
+            const icon = icons[catIndex % icons.length];
+            
+            // Pills in header
+            pillsHTML += `<a href="#${safeId}" class="cat-pill">${catName.split(' ')[0]} ${catName.split(' ')[1]}</a>`;
+            
+            // Floating menu items
+            floatingHTML += `
+                <a href="#${safeId}" class="floating-menu-item" title="${catName}">
+                    <span class="icon">${icon}</span>
+                    <span class="text">${catName}</span>
+                </a>
+            `;
+
             htmlContent += `
-                <div class="card">
+                <div class="card" id="${safeId}" data-category="${catName}">
                     <h2>${catName}</h2>
                     <div class="table-responsive">
                         <table>
@@ -208,7 +285,7 @@
             `;
             tests.forEach(test => {
                 htmlContent += `
-                            <tr>
+                            <tr class="test-row" data-search="${test.i.toLowerCase()} ${test.t.toLowerCase()} ${test.p.toLowerCase()}">
                                 <td><span class="badge">${test.i}</span></td>
                                 <td><strong>${test.t}</strong></td>
                                 <td><span class="tool-badge">${test.tl}</span></td>
@@ -223,10 +300,57 @@
                     </div>
                 </div>
             `;
+            catIndex++;
         }
 
         appDiv.innerHTML = htmlContent;
+        catPillsDiv.innerHTML = pillsHTML;
+        floatingMenuDiv.innerHTML = floatingHTML;
 
+        // Toggle search box
+        window.toggleSearch = function() {
+            const input = document.getElementById('searchInput');
+            input.classList.toggle('active');
+            if(input.classList.contains('active')) {
+                input.focus();
+            } else {
+                input.value = '';
+                filterTests();
+            }
+        }
+
+        // Filter / Search function
+        window.filterTests = function() {
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const rows = card.querySelectorAll('.test-row');
+                let cardHasVisibleRow = false;
+
+                rows.forEach(row => {
+                    const textData = row.getAttribute('data-search');
+                    if (textData.includes(query)) {
+                        row.classList.remove('hidden-row');
+                        cardHasVisibleRow = true;
+                        visibleCount++;
+                    } else {
+                        row.classList.add('hidden-row');
+                    }
+                });
+
+                if (cardHasVisibleRow) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            document.getElementById('stats').innerText = query ? `نتایج جستجو: ${visibleCount} مورد یافت شد` : `تعداد کل تست‌های بارگذاری شده: ${db.length} مورد`;
+        }
+
+        // Copy functionality
         window.copySnippet = function(element) {
             const text = element.innerText;
             navigator.clipboard.writeText(text).then(() => {
