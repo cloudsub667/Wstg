@@ -118,7 +118,7 @@
 
     <script>
         const db = [
-            // 0. QUICK PAYLOADS (ADDED AT THE VERY BEGINNING)
+            // 0. QUICK PAYLOADS (ADDED AT THE VERY BEGINNING AS A STANDARD CARD)
             { c: "۰. پیلودها و دستورات پرکاربرد (Quick Payloads)", i: "QUICK-01", t: "پی‌لود XSS عمومی", tl: "Browser", p: `<script>alert(document.domain)</script>\n<svg/onload=alert(1)>` },
             { c: "۰. پیلودها و دستورات پرکاربرد (Quick Payloads)", i: "QUICK-02", t: "پی‌لود SQLi عمومی", tl: "Burp Repeater", p: `' OR '1'='1 -- \nadmin' -- \nUNION SELECT null,null--` },
             { c: "۰. پیلودها و دستورات پرکاربرد (Quick Payloads)", i: "QUICK-03", t: "پی‌لود مسیر (LFI / Traversal)", tl: "Burp Repeater", p: `../../../../etc/passwd\n..\\..\\..\\..\\windows\\win.ini` },
@@ -248,7 +248,7 @@
         const catPillsDiv = document.getElementById('catPills');
         const floatingMenuDiv = document.getElementById('floatingMenu');
         
-        document.getElementById('stats').innerText = `تعداد کل تست‌های بارگذاری شده: ${db.length} مورد`;
+        document.getElementById('stats').innerText = `تعداد کل آیتم‌ها و تست‌های بارگذاری شده: ${db.length} مورد`;
 
         const categories = {};
         db.forEach(item => {
@@ -350,7 +350,7 @@
                 }
             });
 
-            document.getElementById('stats').innerText = query ? `نتایج جستجو: ${visibleCount} مورد یافت شد` : `تعداد کل تست‌های بارگذاری شده: ${db.length} مورد`;
+            document.getElementById('stats').innerText = query ? `نتایج جستجو: ${visibleCount} مورد یافت شد` : `تعداد کل آیتم‌ها و تست‌های بارگذاری شده: ${db.length} مورد`;
         }
 
         window.copySnippet = function(element) {
